@@ -33,7 +33,7 @@ def get_models(brand):
 
 @app.route("/api/similar/<brand>/<model>")
 def get_similar(brand, model):
-    return
+    return ["Works"]
 
 
 if __name__ == "__main__":

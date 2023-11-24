@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import { FormSelect } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import CarCard from "../components/CarCard";
 
 const Home = () => {
   const [brands, setBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("Any");
 
   const [models, setModels] = useState([]);
+  const [selectedModel, setSelectedModel] = useState("Any");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchBrand();
@@ -20,6 +22,15 @@ const Home = () => {
   useEffect(() => {
     fetchModel(selectedBrand);
   }, [selectedBrand]);
+
+  const handleSearch = async () => {
+    try {
+      const computedData = await findSimilarResults();
+      navigate("/results", { state: { data: computedData } });
+    } catch (error) {
+      console.error("Error finding similar results:", error);
+    }
+  };
 
   const fetchModel = async (selectedBrand) => {
     try {
@@ -52,6 +63,23 @@ const Home = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+  const findSimilarResults = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/similar/${selectedBrand}/${selectedModel}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <Container>
       <h1>Find a Similar Car</h1>
@@ -69,7 +97,9 @@ const Home = () => {
           </FormSelect>
         </Col>
         <Col>
-          <FormSelect>
+          <FormSelect
+            onChange={(event) => setSelectedModel(event.target.value)}
+          >
             <option value="Any">Any Model</option>
             {models.map((brand, index) => (
               <option key={index} value={brand}>
@@ -79,9 +109,13 @@ const Home = () => {
           </FormSelect>
         </Col>
         <Col>
-          <Link to={"/results"}>
-            <Button variant="primary">Search</Button>
-          </Link>
+          <Button
+            onClick={() => handleSearch()}
+            variant="primary"
+            disabled={selectedBrand === "Any"}
+          >
+            Search
+          </Button>
         </Col>
       </Row>
     </Container>
