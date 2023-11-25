@@ -6,8 +6,8 @@ const CarCard = (props) => {
   const dynamicImage = require(`../CarImgs/${props.img}`);
   return (
     <Link>
-      <Card>
-        <Image src={dynamicImage} />
+      <Card style={{ width: "25rem", marginBottom: "2rem" }}>
+        <Image src={dynamicImage} fluid />
         <Card.Body></Card.Body>
       </Card>
     </Link>
