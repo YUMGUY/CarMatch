@@ -38,7 +38,8 @@ const Results = () => {
             return {
               make: brand,
               model,
-              price: result,
+              price: result[0],
+              seating: result[1],
               // Add other properties from the API response if needed
             };
           } catch (error) {
@@ -86,6 +87,7 @@ const Results = () => {
                   make={car.make}
                   model={car.model}
                   price={car.price}
+                  seating={car.seating}
                 />
               </Col>
             ))}

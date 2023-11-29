@@ -3,7 +3,7 @@ import Card from "react-bootstrap/Card";
 
 const CarCard = (props) => {
   const dynamicImage = require(`../CarImgs/${props.img}`);
-  const { make, model, price } = props;
+  const { make, model, price, seating } = props;
 
   return (
     <Card style={{ width: "25rem", marginBottom: "2rem" }}>
@@ -14,6 +14,7 @@ const CarCard = (props) => {
           {make} {model}{" "}
         </h1>
         <h2> Price: ${price} </h2>
+        <h3>Seating: {seating}</h3>
       </Card.Body>
     </Card>
   );
