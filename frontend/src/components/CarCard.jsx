@@ -4,13 +4,16 @@ import { Link } from "react-router-dom";
 
 const CarCard = (props) => {
   const dynamicImage = require(`../CarImgs/${props.img}`);
+  const {make, model, price} = props;
+
   return (
-    <Link>
       <Card style={{ width: "25rem", marginBottom: "2rem" }}>
         <Image src={dynamicImage} fluid />
-        <Card.Body></Card.Body>
+        <Card.Body>
+        <h1> {make} {model} </h1>
+        <h2> Price: ${price} </h2>
+        </Card.Body>
       </Card>
-    </Link>
   );
 };
 
