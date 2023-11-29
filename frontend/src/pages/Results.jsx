@@ -15,29 +15,35 @@ const Results = () => {
     }
     return result;
   };
-
-  const rows = chunkArray(similarCars, 3);
-
+  
+  const rows = chunkArray(priceData, 3);
+  
   const getPricesForSimilarCars = async (similarCars) => {
     try {
-      const prices = await Promise.all(
+      const carsWithPrices = await Promise.all(
         similarCars.map(async ([brand, model]) => {
           try {
             const response = await fetch(`http://localhost:5000/api/price/${brand}/${model}`);
-  
+
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-  
+
             const result = await response.json();
             console.log(result);
-            return result;
+
+            return {
+              make: brand,
+              model,
+              price: result,
+              // Add other properties from the API response if needed
+            };
           } catch (error) {
             console.error("Error fetching data:", error);
             return null;
           }
         })
       );
-  
-      return prices.filter(Boolean);
+
+      return carsWithPrices.filter(Boolean);
     } catch (error) {
       console.error("Error fetching prices:", error);
       return [];
@@ -47,8 +53,8 @@ const Results = () => {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const prices = await getPricesForSimilarCars(similarCars);
-        setPriceData(prices);
+        const carsWithPrices = await getPricesForSimilarCars(similarCars);
+        setPriceData(carsWithPrices);
       } catch (error) {
         console.error("Error fetching prices:", error);
       }
@@ -56,7 +62,6 @@ const Results = () => {
   
     fetchPrices();
   }, [similarCars]);
-  
 
   return (
     <Container>
@@ -67,10 +72,10 @@ const Results = () => {
             {row.map((car, colIndex) => (
               <Col key={colIndex}>
                 <CarCard 
-                  img={`${car[0]}_${car[1]}.avif`}
-                  make={car[0]} 
-                  model={car[1]} 
-                  price={priceData[colIndex + rowIndex * 3]} 
+                  img={`${car.make}_${car.model}.avif`}
+                  make={car.make}
+                  model={car.model}
+                  price={car.price}
                 />
               </Col>
             ))}
