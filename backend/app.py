@@ -85,9 +85,10 @@ def get_similar(brand, model):
     # Sort the similarities in descending order
     sorted_sims = sorted(enumerate(sims), key=lambda x: x[1], reverse=True)
     similar_cars = []
-    for index, similarity in sorted_sims[:5]:
+    for index, similarity in sorted_sims:
         similar_cars.append((matrix[index][1], matrix[index][0]))
     return similar_cars
+
 
 @app.route("/api/price/<brand>/<model>", methods=["GET"])
 def get_price(brand, model):
@@ -95,11 +96,12 @@ def get_price(brand, model):
     df = pd.read_excel("./470 Project Data.xlsx", sheet_name=sheet_name)
     df = df.fillna(0)
     matrix = df.values
-    
+
     for i in range(len(matrix)):
         if model == matrix[i][0]:
             price = matrix[i][3]
     return str(price)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

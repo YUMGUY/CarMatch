@@ -26,7 +26,13 @@ const Home = () => {
   const handleSearch = async () => {
     try {
       const computedData = await findSimilarResults();
-      navigate("/results", { state: { data: computedData } });
+      navigate("/results", {
+        state: {
+          data: computedData,
+          model: selectedModel,
+          brand: selectedBrand,
+        },
+      });
     } catch (error) {
       console.error("Error finding similar results:", error);
     }

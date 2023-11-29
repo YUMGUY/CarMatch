@@ -6,6 +6,8 @@ import CarCard from "../components/CarCard";
 const Results = () => {
   const location = useLocation();
   const similarCars = location.state?.data;
+  const model = location.state?.model;
+  const brand = location.state?.brand;
   const [priceData, setPriceData] = useState([]);
 
   const chunkArray = (array, columns) => {
@@ -23,10 +25,13 @@ const Results = () => {
       const prices = await Promise.all(
         similarCars.map(async ([brand, model]) => {
           try {
-            const response = await fetch(`http://localhost:5000/api/price/${brand}/${model}`);
-  
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-  
+            const response = await fetch(
+              `http://localhost:5000/api/price/${brand}/${model}`
+            );
+
+            if (!response.ok)
+              throw new Error(`HTTP error! Status: ${response.status}`);
+
             const result = await response.json();
             console.log(result);
             return result;
@@ -36,14 +41,14 @@ const Results = () => {
           }
         })
       );
-  
+
       return prices.filter(Boolean);
     } catch (error) {
       console.error("Error fetching prices:", error);
       return [];
     }
   };
-  
+
   useEffect(() => {
     const fetchPrices = async () => {
       try {
@@ -53,24 +58,28 @@ const Results = () => {
         console.error("Error fetching prices:", error);
       }
     };
-  
+
     fetchPrices();
   }, [similarCars]);
-  
 
   return (
     <Container>
-      <h1>Results</h1>
+      <h1>
+        Results for {brand} {model}
+      </h1>
       <Container>
         {rows.map((row, rowIndex) => (
           <Row key={rowIndex}>
             {row.map((car, colIndex) => (
               <Col key={colIndex}>
-                <CarCard 
-                  img={`${car[0]}_${car[1]}.avif`}
-                  make={car[0]} 
-                  model={car[1]} 
-                  price={priceData[colIndex + rowIndex * 3]} 
+                <CarCard
+                  img={`${car[0].replace(/\s/g, "")}_${car[1].replace(
+                    /\s/g,
+                    ""
+                  )}.avif`}
+                  make={car[0]}
+                  model={car[1]}
+                  price={priceData[colIndex + rowIndex * 3]}
                 />
               </Col>
             ))}
