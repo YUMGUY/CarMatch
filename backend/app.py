@@ -70,16 +70,18 @@ def get_similar(brand, model):
             m = np.concatenate((m1, m2))
 
             # Weights added to each variable to even out differences between variables.
+            m[0] = m[0] * 10000
             m[1] = m[1] * 10
             m[2] = m[2] * 100
-            m[3] = m[3] * 100
-            m[4] = m[4] * 1000
-            m[5] = m[5] * 1000
+            m[3] = m[3] * 10
+            m[4] = m[4] * 10
+            m[5] = m[5] * 100
+            c[0] = c[0] * 10000
             c[1] = c[1] * 10
             c[2] = c[2] * 100
-            c[3] = c[3] * 100
-            c[4] = c[4] * 1000
-            c[5] = c[5] * 1000
+            c[3] = c[3] * 10
+            c[4] = c[4] * 10
+            c[5] = c[5] * 100
             sims.append(cosine_similarity_function(c, m))
 
     # Sort the similarities in descending order
@@ -87,6 +89,7 @@ def get_similar(brand, model):
     similar_cars = []
     for index, similarity in sorted_sims:
         similar_cars.append((matrix[index][1], matrix[index][0]))
+    print(similar_cars)
     return similar_cars
 
 
