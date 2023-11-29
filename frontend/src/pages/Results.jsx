@@ -18,11 +18,11 @@ const Results = () => {
     return result;
   };
 
-  const rows = chunkArray(similarCars, 3);
+  const rows = chunkArray(priceData, 3);
 
   const getPricesForSimilarCars = async (similarCars) => {
     try {
-      const prices = await Promise.all(
+      const carsWithPrices = await Promise.all(
         similarCars.map(async ([brand, model]) => {
           try {
             const response = await fetch(
@@ -34,7 +34,13 @@ const Results = () => {
 
             const result = await response.json();
             console.log(result);
-            return result;
+
+            return {
+              make: brand,
+              model,
+              price: result,
+              // Add other properties from the API response if needed
+            };
           } catch (error) {
             console.error("Error fetching data:", error);
             return null;
@@ -42,7 +48,7 @@ const Results = () => {
         })
       );
 
-      return prices.filter(Boolean);
+      return carsWithPrices.filter(Boolean);
     } catch (error) {
       console.error("Error fetching prices:", error);
       return [];
@@ -52,8 +58,8 @@ const Results = () => {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const prices = await getPricesForSimilarCars(similarCars);
-        setPriceData(prices);
+        const carsWithPrices = await getPricesForSimilarCars(similarCars);
+        setPriceData(carsWithPrices);
       } catch (error) {
         console.error("Error fetching prices:", error);
       }
@@ -73,13 +79,13 @@ const Results = () => {
             {row.map((car, colIndex) => (
               <Col key={colIndex}>
                 <CarCard
-                  img={`${car[0].replace(/\s/g, "")}_${car[1].replace(
+                  img={`${car.make.replace(/\s/g, "")}_${car.model.replace(
                     /\s/g,
                     ""
                   )}.avif`}
-                  make={car[0]}
-                  model={car[1]}
-                  price={priceData[colIndex + rowIndex * 3]}
+                  make={car.make}
+                  model={car.model}
+                  price={car.price}
                 />
               </Col>
             ))}
