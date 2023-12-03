@@ -88,8 +88,11 @@ const Home = () => {
   };
 
   return (
-    <Container>
-      <h1>Find a Similar Car</h1>
+    <Container style={HomeStyle.container}>
+      <Container style={HomeStyle.title}>
+      <h1>CarToGo</h1>
+      </Container>
+      <h1>Find a Similar Car!</h1>
       <Row>
         <Col>
           <FormSelect
@@ -120,6 +123,7 @@ const Home = () => {
             onClick={() => handleSearch()}
             variant="primary"
             disabled={selectedBrand === "Any"}
+            style={HomeStyle.largeButton}
           >
             Search
           </Button>
@@ -127,6 +131,24 @@ const Home = () => {
       </Row>
     </Container>
   );
+};
+
+const HomeStyle = {
+  container: {
+    backgroundColor: 'lightblue', // Replace with your desired background color
+    padding: '20px',
+    textAlign: 'center',
+  },
+  title: {
+    color: 'white', // Replace with your desired text color
+    fontSize: '3rem', // Adjust the font size as needed
+    fontWeight: 'bold',
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', // Add a subtle text shadow
+    margin: '0', // Remove default margin
+  },
+  largeButton: {
+    width: '80%', // Set the desired width as a percentage
+  },
 };
 
 export default Home;
