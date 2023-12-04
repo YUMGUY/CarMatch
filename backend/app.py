@@ -104,7 +104,8 @@ def get_price(brand, model):
         if model == matrix[i][0]:
             price = matrix[i][3]
             seating = matrix[i][9]
-    return [str(price), str(seating)]
+            body = matrix[i][10]
+    return [str(price), str(seating), str(body)]
 
 
 if __name__ == "__main__":

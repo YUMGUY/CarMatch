@@ -40,6 +40,7 @@ const Results = () => {
               model,
               price: result[0],
               seating: result[1],
+              body: result[2]
               // Add other properties from the API response if needed
             };
           } catch (error) {
@@ -80,14 +81,17 @@ const Results = () => {
             {row.map((car, colIndex) => (
               <Col key={colIndex}>
                 <CarCard
-                  img={`${car.make.replace(/\s/g, "")}_${car.model.replace(
-                    /\s/g,
-                    ""
-                  )}.avif`}
+                  img={(car.body === "Sedan" || car.body === "Truck" || car.body === "Sport")
+                  ? "StockSedan(1).avif"
+                  : `${car.make.replace(/\s/g, "")}_${car.model.replace(
+                      /\s/g,
+                      ""
+                    )}.avif`}
                   make={car.make}
                   model={car.model}
                   price={car.price}
                   seating={car.seating}
+                  body={car.body}
                 />
               </Col>
             ))}
